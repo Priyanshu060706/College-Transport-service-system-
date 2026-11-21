@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Smart Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .smooth-shadow { box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex flex-shrink-0 z-20 shadow-sm">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-sm">
+                        <i class="fa-solid fa-bus-simple text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg leading-tight text-slate-900">Smart Travel</h1>
+                        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Transport Management</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5 mt-2">
+                <a href="home.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-house text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Dashboard
+                </a>
+                
+                <a href="booking.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-ticket text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Booking
+                </a>
+                
+                <a href="your-bus.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-bus text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Your Bus
+                </a>
+
+                <a href="billing.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-receipt text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Billing & Pass
+                </a>
+                
+                <a href="emergency.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-triangle-exclamation text-slate-400 group-hover:text-red-600 w-5 text-center transition"></i>
+                    Emergency
+                </a>
+                
+                <a href="tracking.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-map-location-dot text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Bus Tracking
+                </a>
+
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition group border border-brand-200">
+                    <i class="fa-solid fa-user text-brand-600 w-5 text-center"></i>
+                    My Profile
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-xl font-medium transition group">
+                <i class="fa-solid fa-arrow-right-from-bracket text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 relative">
+        
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-10 flex-shrink-0 h-20 flex items-center px-6 justify-between">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-500 hover:text-brand-600 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h2 class="text-xl font-bold text-slate-800">Student Profile & Pass Details</h2>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <button class="relative p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition focus:outline-none">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1.5 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border-2 border-white"></span>
+                        </span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-3 pl-6 border-l border-slate-200 cursor-pointer">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-slate-900 leading-none" id="navName">Priyanshu Nainwal</p>
+                        <p class="text-[11px] text-slate-500 font-medium mt-1" id="navRoll">ID: ST-89021</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold shadow-md" id="navAvatar">
+                        PN
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            
+            <div class="max-w-5xl mx-auto space-y-8 fade-in-up">
+                
+                <div class="bg-white rounded-3xl border border-slate-200 smooth-shadow overflow-hidden">
+                    <div class="bg-gradient-to-r from-brand-600 via-brand-700 to-brand-800 p-8 text-white relative">
+                        <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+                            
+                            <div class="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                                <div class="w-24 h-24 rounded-2xl bg-white text-brand-700 flex items-center justify-center font-extrabold text-3xl shadow-lg border-4 border-white/20 shrink-0" id="headerAvatar">
+                                    PN
+                                </div>
+                                <div class="space-y-1">
+                                    <div class="flex items-center justify-center sm:justify-start gap-2">
+                                        <span class="bg-white/20 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider backdrop-blur-sm">Verified Student</span>
+                                        <span class="bg-emerald-400 text-slate-900 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Active Pass</span>
+                                    </div>
+                                    <h2 class="text-3xl font-extrabold" id="headerName">Priyanshu Nainwal</h2>
+                                    <p class="text-brand-100 text-sm font-medium" id="headerCourse">BCA (Bachelor of Computer Applications) • 2nd Year</p>
+                                    <p class="text-xs text-brand-200 font-medium flex items-center justify-center sm:justify-start gap-1 mt-1">
+                                        <i class="fa-solid fa-location-dot"></i> <span id="headerCity">Dehradun, Uttarakhand</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-center md:items-end gap-3 w-full md:w-auto">
+                                <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/20 text-center md:text-right w-full md:w-auto">
+                                    <p class="text-[10px] uppercase tracking-widest text-brand-200 font-bold">Student Roll ID</p>
+                                    <p class="text-xl font-mono font-extrabold text-white" id="headerRoll">ST-89021</p>
+                                </div>
+                                <button onclick="toggleEditMode()" id="editToggleBtn" class="w-full md:w-auto bg-white hover:bg-brand-50 text-brand-700 font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-pen-to-square"></i> <span id="editBtnText">Edit Profile Details</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-50 border-t border-brand-100 px-8 py-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Date of Birth</p>
+                            <p class="text-sm font-extrabold text-slate-800" id="barDob">06 July 2006</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Age</p>
+                            <p class="text-sm font-extrabold text-slate-800" id="barAge">20 Years</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Assigned Stop</p>
+                            <p class="text-sm font-extrabold text-brand-700" id="barRoute">Dehradun ISBT</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pass Expiry</p>
+                            <p class="text-sm font-extrabold text-emerald-600" id="barExpiry">Nov 10, 2026</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="bg-brand-700 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden border border-brand-600">
+                            
+                            <div class="flex justify-between items-start border-b border-brand-600/80 pb-4 mb-5">
+                                <div>
+                                    <div class="flex items-center gap-2 text-brand-200">
+                                        <i class="fa-solid fa-bus-simple text-sm"></i>
+                                        <span class="font-extrabold text-xs tracking-wider uppercase">Digital Bus Pass</span>
+                                    </div>
+                                    <p class="text-[10px] text-brand-200 font-mono mt-0.5">SMART TRAVEL AUTHORITY</p>
+                                </div>
+                                <span class="text-[10px] bg-white/20 text-white font-bold px-2.5 py-1 rounded-md border border-white/30">VERIFIED</span>
+                            </div>
+
+                            <div class="space-y-3 mb-6">
+                                <div class="bg-brand-800/60 p-3 rounded-xl border border-brand-600/50">
+                                    <p class="text-[10px] uppercase font-bold text-brand-200">Student Name</p>
+                                    <p class="text-sm font-extrabold text-white" id="passStudentName">Priyanshu Nainwal</p>
+                                </div>
+                                <div class="bg-brand-800/60 p-3 rounded-xl border border-brand-600/50">
+                                    <p class="text-[10px] uppercase font-bold text-brand-200">Roll Number / ID</p>
+                                    <p class="font-mono text-base font-extrabold text-brand-100" id="passRoll">ST-89021</p>
+                                </div>
+                                <div class="bg-brand-800/60 p-3 rounded-xl border border-brand-600/50">
+                                    <p class="text-[10px] uppercase font-bold text-brand-200">Assigned Route Stop</p>
+                                    <p class="text-sm font-bold text-white" id="passRouteName">Dehradun ISBT Terminal</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="bg-brand-800/60 p-3 rounded-xl border border-brand-600/50">
+                                        <p class="text-[10px] uppercase font-bold text-brand-200">DOB</p>
+                                        <p class="text-xs font-bold text-white" id="passDob">06 July 2006</p>
+                                    </div>
+                                    <div class="bg-brand-800/60 p-3 rounded-xl border border-brand-600/50">
+                                        <p class="text-[10px] uppercase font-bold text-brand-200">Valid Until</p>
+                                        <p class="text-xs font-bold text-emerald-300" id="passExpiry">Nov 10, 2026</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-white p-3.5 rounded-2xl flex items-center justify-between shadow-md">
+                                <div class="text-slate-900">
+                                    <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Bus Scan QR Code</p>
+                                    <p class="text-xs font-bold text-slate-800">Present at Entry Gate</p>
+                                </div>
+                                <i class="fa-solid fa-qrcode text-3xl text-brand-700"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white rounded-3xl p-6 lg:p-8 border border-slate-200 smooth-shadow">
+                            <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+                                <div>
+                                    <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                                        <i class="fa-solid fa-id-card text-brand-600"></i> Edit Student Profile
+                                    </h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Update personal details, course info, and phone credentials below.</p>
+                                </div>
+                            </div>
+
+                            <form id="profileForm" onsubmit="saveProfile(event)" class="space-y-5">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Full Name</label>
+                                        <input type="text" id="inputName" value="Priyanshu Nainwal" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Student Roll No / ID</label>
+                                        <input type="text" id="inputRoll" value="ST-89021" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Date of Birth</label>
+                                        <input type="text" id="inputDob" value="06 July 2006" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Age</label>
+                                        <input type="number" id="inputAge" value="20" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Course / Program</label>
+                                        <input type="text" id="inputCourse" value="BCA (Bachelor of Computer Applications)" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Academic Year</label>
+                                        <input type="text" id="inputYear" value="2nd Year" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">City / Location</label>
+                                        <input type="text" id="inputCity" value="Dehradun, Uttarakhand" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-700 mb-1.5">Mobile Phone</label>
+                                        <input type="tel" id="inputPhone" value="+91 98765 43210" disabled class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-600 outline-none text-sm bg-slate-50 disabled:bg-slate-100 disabled:opacity-80 disabled:cursor-not-allowed transition font-medium">
+                                    </div>
+                                </div>
+
+                                <div class="pt-4 border-t border-slate-100 flex justify-end gap-3 hidden" id="saveActions">
+                                    <button type="button" onclick="cancelEdit()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 transition">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition shadow-md shadow-brand-600/20">
+                                        Save Profile Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="mt-12 pt-4 border-t border-slate-200 text-center">
+                <p class="text-xs text-slate-400 font-medium">
+                    &copy; 2026 Smart Travel Management System. By Priyanshu Nainwal & Team.
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        let isEditing = false;
+
+        const routeMap = {
+            'isbt': 'Dehradun ISBT Terminal',
+            'clocktower': 'Clock Tower',
+            'railway': 'Railway Station',
+            'premnagar': 'Prem Nagar',
+            'raipur': 'Raipur'
+        };
+
+        document.addEventListener("DOMContentLoaded", async function() {
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (savedProfile) {
+                applyProfileData(savedProfile);
+            }
+
+            try {
+                const response = await fetch('http://localhost:8080/api/transport/profile', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    const serverData = await response.json();
+                    applyProfileData(serverData);
+                    localStorage.setItem('userProfile', JSON.stringify(serverData));
+                }
+            } catch (err) {
+                console.log("Java Backend running offline. Synchronized localStorage utilized.");
+            }
+
+            const booking = JSON.parse(localStorage.getItem('userBooking'));
+            let routeKey = (booking && booking.routeKey) ? booking.routeKey : 'isbt';
+            if (routeMap[routeKey]) {
+                const routeName = routeMap[routeKey];
+                document.getElementById('passRouteName').innerText = routeName;
+                document.getElementById('barRoute').innerText = routeName;
+            }
+        });
+
+        function toggleEditMode() {
+            isEditing = !isEditing;
+            const inputs = document.querySelectorAll('#profileForm input');
+            const saveActions = document.getElementById('saveActions');
+            const editBtnText = document.getElementById('editBtnText');
+
+            inputs.forEach(input => {
+                input.disabled = !isEditing;
+                if (isEditing) {
+                    input.classList.remove('bg-slate-50');
+                    input.classList.add('bg-white');
+                } else {
+                    input.classList.add('bg-slate-50');
+                    input.classList.remove('bg-white');
+                }
+            });
+
+            if (isEditing) {
+                saveActions.classList.remove('hidden');
+                editBtnText.innerText = 'Editing Active';
+            } else {
+                saveActions.classList.add('hidden');
+                editBtnText.innerText = 'Edit Profile Details';
+            }
+        }
+
+        function cancelEdit() {
+            toggleEditMode();
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (savedProfile) {
+                applyProfileData(savedProfile);
+            }
+        }
+
+        async function saveProfile(event) {
+            event.preventDefault();
+
+            const profileData = {
+                name: document.getElementById('inputName').value,
+                roll: document.getElementById('inputRoll').value,
+                dob: document.getElementById('inputDob').value,
+                age: document.getElementById('inputAge').value,
+                course: document.getElementById('inputCourse').value,
+                year: document.getElementById('inputYear').value,
+                city: document.getElementById('inputCity').value,
+                phone: document.getElementById('inputPhone').value
+            };
+
+            localStorage.setItem('userProfile', JSON.stringify(profileData));
+            applyProfileData(profileData);
+            toggleEditMode();
+
+            try {
+                await fetch('http://localhost:8080/api/transport/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(profileData)
+                });
+            } catch (err) {
+                console.log("Java Backend offline. Profile updated locally.");
+            }
+
+            alert("✅ Profile details saved successfully!");
+        }
+
+        function applyProfileData(data) {
+            document.getElementById('inputName').value = data.name;
+            document.getElementById('inputRoll').value = data.roll;
+            document.getElementById('inputDob').value = data.dob;
+            document.getElementById('inputAge').value = data.age;
+            document.getElementById('inputCourse').value = data.course;
+            document.getElementById('inputYear').value = data.year;
+            document.getElementById('inputCity').value = data.city;
+            document.getElementById('inputPhone').value = data.phone;
+
+            document.getElementById('headerName').innerText = data.name;
+            document.getElementById('headerRoll').innerText = data.roll;
+            document.getElementById('headerCourse').innerText = `${data.course} • ${data.year}`;
+            document.getElementById('headerCity').innerText = data.city;
+            document.getElementById('navName').innerText = data.name;
+            document.getElementById('navRoll').innerText = `ID: ${data.roll}`;
+
+            document.getElementById('barDob').innerText = data.dob;
+            document.getElementById('barAge').innerText = `${data.age} Years`;
+
+            const initials = data.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('headerAvatar').innerText = initials;
+            document.getElementById('navAvatar').innerText = initials;
+
+            document.getElementById('passStudentName').innerText = data.name;
+            document.getElementById('passRoll').innerText = data.roll;
+            document.getElementById('passDob').innerText = data.dob;
+        }
+    </script>
+</body>
+</html>

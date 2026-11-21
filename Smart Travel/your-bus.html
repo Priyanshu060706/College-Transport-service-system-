@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bus | Smart Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .smooth-shadow { box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.08), 0 8px 10px -6px rgba(37, 99, 235, 0.04); }
+        .hover-lift { transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .hover-lift:hover { transform: translateY(-6px); box-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.18); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex flex-shrink-0 z-20 shadow-sm">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-tr from-brand-700 to-brand-500 text-white p-2.5 rounded-xl shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-bus-simple text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg leading-tight text-slate-900">Smart Travel</h1>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5 mt-4">
+                <a href="home.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-house text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Dashboard
+                </a>
+                
+                <a href="booking.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-ticket text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Booking
+                </a>
+                
+                <a href="your-bus.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition group border border-brand-100 shadow-sm">
+                    <i class="fa-solid fa-bus text-brand-600 w-5 text-center"></i>
+                    Your Bus
+                </a>
+
+                <a href="billing.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-receipt text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Billing & Pass
+                </a>
+                
+                <a href="emergency.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-triangle-exclamation text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i>
+                    Emergency
+                </a>
+                
+                <a href="tracking.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-map-location-dot text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    Bus Tracking
+                </a>
+
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-user text-slate-400 group-hover:text-brand-600 w-5 text-center transition"></i>
+                    My Profile
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-xl font-medium transition group">
+                <i class="fa-solid fa-arrow-right-from-bracket text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 relative">
+        
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-10 flex-shrink-0 h-20 flex items-center px-6 justify-between">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-500 hover:text-brand-600 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Your Route Buses</h2>
+                    <p class="text-xs text-slate-500 hidden sm:block">Assigned bus fleet & schedule details</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <button class="relative p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition focus:outline-none">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1.5 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-600 border-2 border-white"></span>
+                        </span>
+                    </button>
+                </div>
+                <a href="profile.html" class="flex items-center gap-3 pl-6 border-l border-slate-200 cursor-pointer">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-slate-900 leading-none" id="headerUserName">Priyanshu Nainwal</p>
+                        <p class="text-[11px] text-brand-600 font-semibold mt-1" id="headerUserRoll">ID: ST-89021</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center font-extrabold shadow-md shadow-brand-500/20" id="headerAvatar">
+                        PN
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            
+            <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-3xl border border-slate-200/80 smooth-shadow fade-in-up">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 border border-brand-100 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-extrabold text-slate-900" id="routeTitle">Route Information</h2>
+                        <p class="text-slate-500 text-xs mt-0.5" id="routeSubtitle">Loading your assigned route details...</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 bg-brand-50 text-brand-700 text-xs font-bold px-4 py-2.5 rounded-xl border border-brand-200/80" id="routeBadge">
+                    <i class="fa-solid fa-circle-dot text-brand-500 animate-pulse"></i> Active Assigned Route
+                </div>
+            </div>
+
+            <div id="busContainer" class="space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="busCardsList">
+                </div>
+            </div>
+
+            <footer class="mt-12 pt-6 border-t border-slate-200/80 text-center">
+                <p class="text-xs text-slate-400 font-medium">
+                    &copy; 2026 Smart Travel Management System. By Priyanshu Nainwal & Team.
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        const routeBusDatabase = {
+            'isbt': {
+                routeName: 'Dehradun ISBT → Main Campus',
+                buses: [
+                    {
+                        busNo: 'Bus #21',
+                        regNo: 'UK07-TR-4592',
+                        shift: 'Morning Shift • Slot 1',
+                        pickupTime: '07:30 AM',
+                        dropTime: '08:15 AM',
+                        capacity: 50,
+                        enrolledStudents: 42,
+                        driver: 'Mr. Ramesh Singh',
+                        conductor: 'Mr. Anil Verma',
+                        status: 'Working'
+                    },
+                    {
+                        busNo: 'Bus #22',
+                        regNo: 'UK07-TR-8812',
+                        shift: 'Morning Shift • Slot 2',
+                        pickupTime: '08:30 AM',
+                        dropTime: '09:15 AM',
+                        capacity: 50,
+                        enrolledStudents: 38,
+                        driver: 'Mr. Suresh Rawat',
+                        conductor: 'Mr. Deepak Sharma',
+                        status: 'Delayed'
+                    }
+                ]
+            },
+            'clocktower': {
+                routeName: 'Clock Tower → Main Campus',
+                buses: [
+                    {
+                        busNo: 'Bus #05',
+                        regNo: 'UK07-TR-1029',
+                        shift: 'Morning Express',
+                        pickupTime: '07:45 AM',
+                        dropTime: '08:20 AM',
+                        capacity: 45,
+                        enrolledStudents: 40,
+                        driver: 'Mr. Vikram Negi',
+                        conductor: 'Mr. Rajesh Kumar',
+                        status: 'Working'
+                    },
+                    {
+                        busNo: 'Bus #06',
+                        regNo: 'UK07-TR-1030',
+                        shift: 'Regular Morning',
+                        pickupTime: '08:40 AM',
+                        dropTime: '09:15 AM',
+                        capacity: 45,
+                        enrolledStudents: 31,
+                        driver: 'Mr. Sanjay Joshi',
+                        conductor: 'Mr. Rohit Gurung',
+                        status: 'Working'
+                    }
+                ]
+            },
+            'railway': {
+                routeName: 'Railway Station → Main Campus',
+                buses: [
+                    {
+                        busNo: 'Bus #11',
+                        regNo: 'UK07-TR-3321',
+                        shift: 'Early Commute',
+                        pickupTime: '07:20 AM',
+                        dropTime: '08:05 AM',
+                        capacity: 52,
+                        enrolledStudents: 48,
+                        driver: 'Mr. Mohan Lal',
+                        conductor: 'Mr. Sunil Thapa',
+                        status: 'Working'
+                    },
+                    {
+                        busNo: 'Bus #12',
+                        regNo: 'UK07-TR-3322',
+                        shift: 'Standard Commute',
+                        pickupTime: '08:15 AM',
+                        dropTime: '09:00 AM',
+                        capacity: 52,
+                        enrolledStudents: 45,
+                        driver: 'Mr. Harvinder Singh',
+                        conductor: 'Mr. Manoj Bishan',
+                        status: 'Delayed'
+                    }
+                ]
+            },
+            'premnagar': {
+                routeName: 'Prem Nagar → Main Campus',
+                buses: [
+                    {
+                        busNo: 'Bus #01',
+                        regNo: 'UK07-TR-9001',
+                        shift: 'Slot A Shuttle',
+                        pickupTime: '08:00 AM',
+                        dropTime: '08:25 AM',
+                        capacity: 40,
+                        enrolledStudents: 35,
+                        driver: 'Mr. Gopal Bhatt',
+                        conductor: 'Mr. Pankaj Das',
+                        status: 'Working'
+                    },
+                    {
+                        busNo: 'Bus #02',
+                        regNo: 'UK07-TR-9002',
+                        shift: 'Slot B Shuttle',
+                        pickupTime: '08:50 AM',
+                        dropTime: '09:15 AM',
+                        capacity: 40,
+                        enrolledStudents: 29,
+                        driver: 'Mr. Devendra Shah',
+                        conductor: 'Mr. Suraj Ram',
+                        status: 'Working'
+                    }
+                ]
+            },
+            'raipur': {
+                routeName: 'Raipur → Main Campus',
+                buses: [
+                    {
+                        busNo: 'Bus #31',
+                        regNo: 'UK07-TR-7711',
+                        shift: 'Shuttle Slot 1',
+                        pickupTime: '07:15 AM',
+                        dropTime: '08:10 AM',
+                        capacity: 55,
+                        enrolledStudents: 50,
+                        driver: 'Mr. Birendra Bisht',
+                        conductor: 'Mr. Kailash Prasad',
+                        status: 'Working'
+                    },
+                    {
+                        busNo: 'Bus #32',
+                        regNo: 'UK07-TR-7712',
+                        shift: 'Shuttle Slot 2',
+                        pickupTime: '08:10 AM',
+                        dropTime: '09:05 AM',
+                        capacity: 55,
+                        enrolledStudents: 41,
+                        driver: 'Mr. Dharmendra Saini',
+                        conductor: 'Mr. Arvind Yadav',
+                        status: 'Delayed'
+                    }
+                ]
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", async function() {
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (savedProfile) {
+                document.getElementById('headerUserName').innerText = savedProfile.name;
+                document.getElementById('headerUserRoll').innerText = `ID: ${savedProfile.roll}`;
+                const initials = savedProfile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                document.getElementById('headerAvatar').innerText = initials;
+            }
+
+            const booking = JSON.parse(localStorage.getItem('userBooking'));
+            const busCardsList = document.getElementById('busCardsList');
+            const routeBadge = document.getElementById('routeBadge');
+            const routeTitle = document.getElementById('routeTitle');
+            const routeSubtitle = document.getElementById('routeSubtitle');
+
+            let routeKey = (booking && booking.routeKey) ? booking.routeKey : 'isbt';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/transport/my-bus', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    const serverData = await response.json();
+                    if (serverData.routeKey) {
+                        routeKey = serverData.routeKey;
+                    }
+                }
+            } catch (err) {
+                console.log("Java backend offline. Using synchronized localStorage.");
+            }
+
+            const routeData = routeBusDatabase[routeKey] || routeBusDatabase['isbt'];
+
+            routeTitle.innerText = routeData.routeName;
+            routeSubtitle.innerText = `Showing active buses operating for your booked route schedule.`;
+            routeBadge.innerHTML = `<i class="fa-solid fa-circle-check text-brand-600"></i> Active Pass Verified`;
+
+            busCardsList.innerHTML = routeData.buses.map((bus, index) => {
+                const occupancyPercent = Math.round((bus.enrolledStudents / bus.capacity) * 100);
+                const isWorking = bus.status === 'Working';
+                const statusBadgeMarkup = isWorking 
+                    ? `<span class="font-extrabold text-emerald-600 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Working
+                       </span>`
+                    : `<span class="font-extrabold text-amber-700 bg-amber-50 border border-amber-200/80 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+                           <i class="fa-solid fa-clock-rotate-left text-amber-500 animate-spin text-xs"></i> Delayed (+15m)
+                       </span>`;
+
+                return `
+                    <div class="bg-white rounded-3xl smooth-shadow border border-slate-200/80 overflow-hidden hover-lift fade-in-up flex flex-col justify-between" style="animation-delay: ${index * 0.15}s">
+                        <div>
+                            <div class="bg-gradient-to-r from-brand-700 via-brand-600 to-brand-500 text-white p-6 sm:p-7 relative overflow-hidden">
+                                <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                                
+                                <div class="flex justify-between items-start relative z-10">
+                                    <div>
+                                        <span class="bg-white/20 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-lg uppercase tracking-wider mb-2.5 inline-block border border-white/20">
+                                            ${bus.shift}
+                                        </span>
+                                        <h3 class="text-3xl font-extrabold tracking-tight">${bus.busNo}</h3>
+                                        <p class="text-xs text-brand-100 font-mono mt-1 flex items-center gap-1.5">
+                                            <i class="fa-solid fa-id-card text-brand-200"></i> Registration: ${bus.regNo}
+                                        </p>
+                                    </div>
+                                    <div class="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center text-2xl text-white backdrop-blur-md border border-white/20 shadow-inner">
+                                        <i class="fa-solid fa-bus"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-6 bg-slate-50/50 border-b border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                                    <p class="text-[11px] text-brand-600 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                        <i class="fa-regular fa-clock text-brand-500"></i> Schedule Timings
+                                    </p>
+                                    <div class="space-y-1">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-xs text-slate-500">Pickup:</span>
+                                            <span class="text-sm font-extrabold text-slate-900">${bus.pickupTime}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-xs text-slate-500">Campus Arrival:</span>
+                                            <span class="text-xs font-bold text-slate-700">${bus.dropTime}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                                    <p class="text-[11px] text-brand-600 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-users text-brand-500"></i> Seat Occupancy
+                                    </p>
+                                    <div class="flex justify-between items-baseline mb-1.5">
+                                        <span class="text-sm font-extrabold text-slate-900">${bus.enrolledStudents} / ${bus.capacity}</span>
+                                        <span class="text-xs font-bold text-brand-600">${occupancyPercent}% Booked</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                                        <div class="bg-gradient-to-r from-brand-500 to-brand-700 h-2 rounded-full transition-all duration-1000" style="width: ${occupancyPercent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-6 space-y-3.5">
+                                <h4 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Assigned Crew</h4>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="flex items-center gap-3 p-3.5 bg-brand-50/50 rounded-2xl border border-brand-100/60">
+                                        <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-sm font-bold shadow-sm">
+                                            <i class="fa-solid fa-id-badge"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-brand-700 font-bold uppercase">Head Driver</p>
+                                            <p class="text-sm font-extrabold text-slate-900 leading-snug">${bus.driver}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-3 p-3.5 bg-brand-50/50 rounded-2xl border border-brand-100/60">
+                                        <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center text-sm font-bold shadow-sm">
+                                            <i class="fa-solid fa-user-shield"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-brand-700 font-bold uppercase">Conductor</p>
+                                            <p class="text-sm font-extrabold text-slate-900 leading-snug">${bus.conductor}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="px-6 pb-6 pt-0">
+                            <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200/60 flex items-center justify-between text-xs">
+                                <span class="text-slate-500 font-medium">Bus Status:</span>
+                                ${statusBadgeMarkup}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        });
+    </script>
+</body>
+</html>

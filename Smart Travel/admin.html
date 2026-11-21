@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal | Smart Travel</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Leaflet CSS for Admin Live Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script>
+    if (localStorage.getItem('isAdminAuthenticated') !== 'true') {
+        window.location.href = 'index.html';
+    }
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a' } }
+            }
+        }
+    }
+</script>
+<style>
+body { background: #f8fafc; }
+.smooth-shadow { box-shadow: 0 4px 20px -2px rgba(0,0,0,.05); }
+.nav-item { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem; border-radius: .75rem; color: #64748b; font-weight: 600; font-size: .875rem; transition: .2s; }
+.nav-item:hover, .nav-item.active { background: #eff6ff; color: #1d4ed8; }
+.page { display: none; }
+.page.active { display: block; }
+.pill { font-size: 11px; font-weight: 800; padding: 4px 9px; border-radius: 999px; }
+.table-row:hover { background: #f8fafc; }
+#adminLiveMap { height: 380px; width: 100%; border-radius: 1rem; z-index: 10; }
+
+/* Popping Highlight Animation for SOS */
+@keyframes sosFlash {
+    0% { background-color: #fef2f2; transform: scale(1); }
+    50% { background-color: #fee2e2; transform: scale(1.01); box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); }
+    100% { background-color: #fef2f2; transform: scale(1); }
+}
+.sos-highlight-banner {
+    animation: sosFlash 1s ease-in-out infinite;
+    border: 2px solid #dc2626 !important;
+}
+</style>
+</head>
+<body class="text-slate-800 antialiased h-screen flex overflow-hidden">
+<aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex flex-shrink-0 z-20 shadow-sm">
+ <div>
+  <div class="h-20 flex items-center px-6 border-b border-slate-100">
+    <div class="flex items-center gap-3">
+        <div class="bg-brand-600 text-white p-2 rounded-lg"><i class="fa-solid fa-bus-simple text-xl"></i></div>
+        <div><h1 class="font-extrabold text-lg leading-tight text-slate-900">Smart Travel</h1><p class="text-[10px] text-slate-500 font-bold tracking-wider uppercase">Admin Console</p></div>
+    </div>
+  </div>
+  <div class="px-4 py-5 space-y-1">
+   <p class="text-[10px] uppercase tracking-widest font-extrabold text-slate-400 px-3 mb-3">Administration</p>
+   <button onclick="switchAdminPage('overview')" class="nav-item active w-full text-left" data-page="overview"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Overview</button>
+   <button onclick="switchAdminPage('emergencies')" class="nav-item w-full text-left" data-page="emergencies">
+       <i class="fa-solid fa-triangle-exclamation w-5 text-center text-red-600"></i> SOS Emergency Center 
+       <span id="navSosCount" class="ml-auto pill bg-red-100 text-red-700 font-extrabold">0</span>
+   </button>
+   <button onclick="switchAdminPage('buses')" class="nav-item w-full text-left" data-page="buses"><i class="fa-solid fa-bus w-5 text-center"></i> Buses & Tracking</button>
+   <button onclick="switchAdminPage('students')" class="nav-item w-full text-left" data-page="students"><i class="fa-solid fa-users w-5 text-center"></i> Students</button>
+   <button onclick="switchAdminPage('drivers')" class="nav-item w-full text-left" data-page="drivers"><i class="fa-solid fa-id-card w-5 text-center"></i> Drivers & Routes</button>
+  </div>
+ </div>
+ <div class="p-4 border-t border-slate-100">
+     <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50">
+         <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-extrabold">AD</div>
+         <div class="min-w-0"><p class="text-sm font-bold truncate">Transport Admin</p><p class="text-xs text-slate-500">Administrator</p></div>
+     </div>
+     <button onclick="adminLogout()" class="nav-item mt-2 w-full text-left text-red-600 hover:bg-red-50"><i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Logout Admin</button>
+ </div>
+</aside>
+
+<main class="flex-1 min-w-0 overflow-y-auto">
+ <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-5 md:px-8 sticky top-0 z-10">
+    <div><p class="text-xs text-slate-400 font-semibold">Smart Travel / Admin</p><h2 id="pageTitle" class="text-xl font-extrabold text-slate-900">Overview Dashboard</h2></div>
+    <div class="flex items-center gap-3">
+        <span class="hidden sm:inline-flex items-center gap-2 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-full"><span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Live Telemetry Active</span>
+        <div class="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold">AD</div>
+    </div>
+ </header>
+
+ <div class="p-5 md:p-8 max-w-7xl mx-auto">
+  
+  <!-- OVERVIEW SECTION -->
+  <section id="overview" class="page active">
+   <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-7">
+       <div><h3 class="text-2xl font-extrabold">Good day, Admin 👋</h3><p class="text-slate-500 mt-1">Monitor live transport operations and student emergencies.</p></div>
+       <button onclick="switchAdminPage('emergencies')" class="bg-red-600 hover:bg-red-700 text-white rounded-xl px-5 py-3 font-bold text-sm shadow-md flex items-center gap-2">
+           <i class="fa-solid fa-triangle-exclamation animate-bounce"></i> Open SOS Emergency Center
+       </button>
+   </div>
+   
+   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-7">
+    <div class="bg-white border border-slate-100 rounded-2xl p-5 smooth-shadow"><div class="flex justify-between items-start"><span class="text-sm font-semibold text-slate-500">Registered Students</span><span class="bg-blue-50 text-blue-600 rounded-xl p-3"><i class="fa-solid fa-users"></i></span></div><p id="studentMetric" class="text-3xl font-extrabold mt-4">8</p><p class="text-xs text-slate-400 mt-1">Active profiles monitored</p></div>
+    <div class="bg-white border border-slate-100 rounded-2xl p-5 smooth-shadow"><div class="flex justify-between items-start"><span class="text-sm font-semibold text-slate-500">Transport Buses</span><span class="bg-indigo-50 text-indigo-600 rounded-xl p-3"><i class="fa-solid fa-bus"></i></span></div><p class="text-3xl font-extrabold mt-4">8 Active</p><p class="text-xs text-slate-400 mt-1">Simulated Dehradun fleet</p></div>
+    <div class="bg-white border border-slate-100 rounded-2xl p-5 smooth-shadow"><div class="flex justify-between items-start"><span class="text-sm font-semibold text-slate-500">Student GPS Feed</span><span class="bg-emerald-50 text-emerald-600 rounded-xl p-3"><i class="fa-solid fa-location-crosshairs"></i></span></div><p id="gpsMetric" class="text-3xl font-extrabold mt-4 text-brand-600">Waiting</p><p class="text-xs text-slate-400 mt-1">Listening for mobile broadcast</p></div>
+    <div id="sosMetricCard" class="bg-white border border-slate-100 rounded-2xl p-5 smooth-shadow transition"><div class="flex justify-between items-start"><span class="text-sm font-semibold text-slate-500">Open SOS Alerts</span><span class="bg-red-50 text-red-600 rounded-xl p-3"><i class="fa-solid fa-triangle-exclamation"></i></span></div><p id="sosMetric" class="text-3xl font-extrabold mt-4 text-red-600">0</p><p class="text-xs text-slate-400 mt-1">Critical notifications</p></div>
+   </div>
+
+   <!-- Live Map Tracking Card -->
+   <div class="bg-white border border-slate-100 rounded-2xl p-6 smooth-shadow mb-7">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h4 class="font-extrabold text-lg text-slate-900">Live Campus Fleet & Student Radar</h4>
+                <p class="text-xs text-slate-500">Real-time positions updated from student phones and fleet transponders.</p>
+            </div>
+            <span id="mapStatusBadge" class="pill bg-amber-100 text-amber-700">Waiting for student signal</span>
+        </div>
+        <div id="adminLiveMap"></div>
+   </div>
+
+   <!-- Overview SOS Banner & Telemetry -->
+   <div class="grid grid-cols-1 xl:grid-cols-3 gap-5">
+    <div id="overviewSosBannerContainer" class="xl:col-span-2 bg-white border border-slate-100 rounded-2xl smooth-shadow overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+            <div><h4 class="font-extrabold text-slate-900">Latest Emergency SOS Alerts</h4><p class="text-xs text-slate-400 mt-0.5">Real-time student distress feed</p></div>
+            <button onclick="switchAdminPage('emergencies')" class="text-brand-600 text-sm font-bold hover:underline">View all <i class="fa-solid fa-arrow-right ml-1"></i></button>
+        </div>
+        <div id="overviewAlerts" class="p-5 space-y-3">
+            <p class="text-xs text-slate-400 italic">No emergency alerts recorded.</p>
+        </div>
+    </div>
+    <div class="bg-white border border-slate-100 rounded-2xl p-5 smooth-shadow">
+        <h4 class="font-extrabold text-slate-900">Live Student Telemetry</h4>
+        <p class="text-xs text-slate-400 mt-1 mb-4">Active mobile connection status</p>
+        <div id="adminTelemetryInfo" class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-2">
+            <p class="text-slate-500 font-medium">No student currently broadcasting location.</p>
+        </div>
+    </div>
+   </div>
+  </section>
+
+  <!-- SOS EMERGENCY CENTER SECTION -->
+  <section id="emergencies" class="page">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h3 class="text-2xl font-extrabold text-slate-900">SOS Emergency Center</h3>
+            <p class="text-slate-500 mt-1">Review live student distress signals, messages, and reported GPS locations.</p>
+        </div>
+        <button onclick="clearAllSosAlerts()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs transition">
+            <i class="fa-solid fa-trash-can mr-2"></i> Clear Resolved Alerts
+        </button>
+    </div>
+
+    <div id="fullSosContainer" class="space-y-4">
+        <!-- Dynamically populated SOS cards -->
+    </div>
+  </section>
+
+  <!-- BUSES & TRACKING SECTION -->
+  <section id="buses" class="page">
+    <div class="mb-6"><h3 class="text-2xl font-extrabold text-slate-900">Buses & Fleet Management</h3><p class="text-slate-500 mt-1">Active transit fleet roster and telemetry overview.</p></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #21</span><h4 class="font-extrabold text-lg">ISBT Express</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Ramesh Singh • Capacity: 50 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #05</span><h4 class="font-extrabold text-lg">Clock Tower Shuttle</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Vikram Negi • Capacity: 45 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #11</span><h4 class="font-extrabold text-lg">Railway Station Cruiser</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Mohan Lal • Capacity: 50 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #01</span><h4 class="font-extrabold text-lg">Premnagar Linker</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Gopal Bhatt • Capacity: 40 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #31</span><h4 class="font-extrabold text-lg">Raipur Flyer</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Birendra Bisht • Capacity: 50 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #14</span><h4 class="font-extrabold text-lg">Ballupur Local Runner</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Suresh Rawat • Capacity: 45 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #08</span><h4 class="font-extrabold text-lg">Rajpur Road Transit</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Dinesh Thapliyal • Capacity: 50 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div><span class="pill bg-blue-50 text-blue-700 mb-2 inline-block">Bus #19</span><h4 class="font-extrabold text-lg">Clement Town Express</h4><p class="text-xs text-slate-500 mt-1">Pilot: Mr. Manoj Chauhan • Capacity: 50 seats</p></div>
+            <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" title="Active on route"></span>
+        </div>
+    </div>
+  </section>
+
+  <!-- REGISTERED STUDENTS SECTION (8 Records) -->
+  <section id="students" class="page">
+    <div class="mb-6"><h3 class="text-2xl font-extrabold text-slate-900">Registered Students</h3><p class="text-slate-500 mt-1">Complete student roster with assigned bus numbers and route credentials.</p></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89021</span>
+                <h4 class="font-bold text-slate-900">Priyanshu Nainwal</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-D • Assigned Bus: <strong class="text-brand-600">Bus #21 (ISBT Route)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89022</span>
+                <h4 class="font-bold text-slate-900">Ajay  Tomar</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-A • Assigned Bus: <strong class="text-brand-600">Bus #05 (Clock Tower Route)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89023</span>
+                <h4 class="font-bold text-slate-900">Shivanshu Yadav</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-D • Assigned Bus: <strong class="text-brand-600">Bus #11 (Railway Station)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89024</span>
+                <h4 class="font-bold text-slate-900">Tanu Sharma</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-D • Assigned Bus: <strong class="text-brand-600">Bus #01 (Premnagar Route)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89025</span>
+                <h4 class="font-bold text-slate-900">Aman Rawat</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-A • Assigned Bus: <strong class="text-brand-600">Bus #31 (Raipur Route)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89026</span>
+                <h4 class="font-bold text-slate-900">Neha Rawat</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-B • Assigned Bus: <strong class="text-brand-600">Bus #14 (Ballupur Route)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89027</span>
+                <h4 class="font-bold text-slate-900">Kunal Negi</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-C • Assigned Bus: <strong class="text-brand-600">Bus #08 (Rajpur Road)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow flex items-center justify-between">
+            <div>
+                <span class="pill bg-brand-50 text-brand-700 mb-1.5 inline-block">ID: ST-89028</span>
+                <h4 class="font-bold text-slate-900">Simran Kaur</h4>
+                <p class="text-xs text-slate-500 mt-1">BCA-A • Assigned Bus: <strong class="text-brand-600">Bus #19 (Clement Town)</strong></p>
+            </div>
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
+        </div>
+    </div>
+  </section>
+
+  <!-- DRIVERS & ROUTES SECTION (8 Records) -->
+  <section id="drivers" class="page">
+    <div class="mb-6"><h3 class="text-2xl font-extrabold text-slate-900">Drivers & Routes Directory</h3><p class="text-slate-500 mt-1">Assigned pilot captains, conductors, and their specific transit corridors.</p></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #21</span>
+            <h4 class="font-extrabold text-lg text-slate-900">ISBT Express Route</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Ramesh Singh (+91 98765-43210)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Anil Verma (+91 98765-12345)</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #05</span>
+            <h4 class="font-extrabold text-lg text-slate-900">Clock Tower Shuttle</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Vikram Negi (+91 97654-32109)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Rajesh Kumar (+91 97123-45670)</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #11</span>
+            <h4 class="font-extrabold text-lg text-slate-900">Railway Station Cruiser</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Mohan Lal (+91 95432-10987)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Sunil Thapa (+91 95123-87654)</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #01</span>
+            <h4 class="font-extrabold text-lg text-slate-900">Premnagar Linker</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Gopal Bhatt (+91 93210-98765)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Pankaj Das (+91 93123-65432)</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #31</span>
+            <h4 class="font-extrabold text-lg text-slate-900">Raipur Flyer</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Birendra Bisht (+91 91098-76543)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Kailash Prasad (+91 91123-43210)</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #14</span>
+            <h4 class="font-extrabold text-lg text-slate-900">Ballupur Local Runner</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Suresh Rawat (+91 90123-45678)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Deepak Thapa (+91 90123-87654)</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #08</span>
+            <h4 class="font-extrabold text-lg text-slate-900">Rajpur Road Transit</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Dinesh Thapliyal (+91 89123-45670)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Naveen Joshi (+91 89123-11223)</p>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow">
+            <span class="pill bg-emerald-50 text-emerald-700 mb-2 inline-block">Bus #19</span>
+            <h4 class="font-extrabold text-lg text-slate-900">Clement Town Express</h4>
+            <p class="text-xs text-slate-600 mt-1"><strong>Pilot:</strong> Mr. Manoj Chauhan (+91 88123-99887)</p>
+            <p class="text-xs text-slate-500 mt-0.5"><strong>Conductor:</strong> Mr. Rohit Rana (+91 88123-44556)</p>
+        </div>
+    </div>
+  </section>
+
+ </div>
+</main>
+
+<!-- Leaflet JS Library -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // Tab Switching Function
+    function switchAdminPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        
+        const target = document.getElementById(pageId);
+        if (target) target.classList.add('active');
+        
+        document.querySelectorAll('.nav-item').forEach(n => {
+            if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(pageId)) {
+                n.classList.add('active');
+            }
+        });
+
+        const titles = {
+            'overview': 'Overview Dashboard',
+            'emergencies': 'SOS Emergency Center',
+            'buses': 'Buses & Fleet Management',
+            'students': 'Registered Students',
+            'drivers': 'Drivers & Routes'
+        };
+        document.getElementById('pageTitle').innerText = titles[pageId] || 'Admin Portal';
+        
+        if (pageId === 'overview' && window.adminMap) {
+            setTimeout(() => window.adminMap.invalidateSize(), 200);
+        }
+    }
+
+    function adminLogout() {
+        localStorage.removeItem('isAdminAuthenticated');
+        window.location.href = 'index.html';
+    }
+
+    // High-visibility, 3.5-second continuous emergency siren alarm loop
+    function playAlertChime() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const totalDuration = 3.5; 
+            const pulses = 14;          
+            const interval = totalDuration / pulses;
+
+            for (let i = 0; i < pulses; i++) {
+                const startTime = audioCtx.currentTime + (i * interval);
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                osc.type = 'sawtooth';
+                const freq = (i % 2 === 0) ? 960 : 720;
+                osc.frequency.setValueAtTime(freq, startTime);
+                osc.frequency.exponentialRampToValueAtTime(300, startTime + (interval * 0.85));
+
+                gainNode.gain.setValueAtTime(0.01, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.45, startTime + 0.03);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + (interval * 0.85));
+
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc.start(startTime);
+                osc.stop(startTime + (interval * 0.85));
+            }
+        } catch (e) {
+            console.log("Audio playback blocked by browser security policy or unsupported.");
+        }
+    }
+
+    // Initialize Leaflet Map
+    let adminMap = L.map('adminLiveMap').setView([30.3165, 78.0322], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(adminMap);
+    window.adminMap = adminMap;
+
+    let studentMarker = null;
+    const studentIcon = L.divIcon({
+        className: 'custom-student-marker',
+        html: '<div style="background:#2563eb; color:white; padding:6px 10px; border-radius:10px; font-weight:bold; font-size:11px; box-shadow:0 4px 12px rgba(0,0,0,0.2); display:flex; align-items:center; gap:5px;"><i class="fa-solid fa-user-graduate"></i> Student Live</div>',
+        iconSize: [110, 35]
+    });
+
+    let lastKnownSosCount = 0;
+
+    // Polling function for Telemetry & SOS Alerts
+    async function pollAdminData() {
+        let alerts = [];
+
+        try {
+            const res = await fetch('http://localhost:8080/api/transport/admin-data');
+            if (res.ok) {
+                const data = await res.json();
+                if (data.sosAlerts) alerts = data.sosAlerts;
+            }
+        } catch (err) {
+            // Fallback to localStorage sync
+        }
+
+        const localAlerts = JSON.parse(localStorage.getItem('smartTravelSOS') || '[]');
+        if (localAlerts.length > alerts.length) {
+            alerts = localAlerts;
+        }
+
+        const openCount = alerts.filter(a => a.status === 'ACTIVE').length;
+        document.getElementById('sosMetric').innerText = openCount;
+        document.getElementById('navSosCount').innerText = openCount;
+
+        const bannerContainer = document.getElementById('overviewSosBannerContainer');
+        const metricCard = document.getElementById('sosMetricCard');
+        
+        if (openCount > lastKnownSosCount) {
+            playAlertChime();
+            if (bannerContainer) bannerContainer.classList.add('sos-highlight-banner');
+            if (metricCard) metricCard.classList.add('sos-highlight-banner');
+            
+            setTimeout(() => {
+                if (bannerContainer) bannerContainer.classList.remove('sos-highlight-banner');
+                if (metricCard) metricCard.classList.remove('sos-highlight-banner');
+            }, 6000);
+        }
+        lastKnownSosCount = openCount;
+
+        const overviewAlertsEl = document.getElementById('overviewAlerts');
+        const fullSosContainerEl = document.getElementById('fullSosContainer');
+
+        if (alerts.length === 0) {
+            overviewAlertsEl.innerHTML = '<p class="text-xs text-slate-400 italic">No emergency alerts recorded.</p>';
+            fullSosContainerEl.innerHTML = '<div class="bg-white p-8 rounded-2xl border border-slate-200 text-center"><p class="text-slate-500 font-medium">No emergency alerts in the system.</p></div>';
+        } else {
+            let overviewHTML = '';
+            let fullHTML = '';
+
+            alerts.forEach((alert, idx) => {
+                const timeStr = new Date(alert.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const cardHTML = `
+                    <div class="p-4 bg-red-50/70 border border-red-200 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-bold shrink-0 mt-0.5">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-bold text-slate-900">${alert.studentName} <span class="text-xs font-normal text-slate-500">(${alert.roll || 'ST-89021'})</span></h4>
+                                    <span class="pill bg-red-600 text-white animate-pulse">SOS ACTIVE</span>
+                                </div>
+                                <p class="text-xs text-slate-700 font-medium mt-1"><strong>Note:</strong> "${alert.message || 'Emergency assistance required.'}"</p>
+                                <p class="text-[11px] text-slate-500 mt-1">Bus: ${alert.bus} • Route: ${alert.route} • Time: ${timeStr}</p>
+                                ${alert.latitude ? `<p class="text-[11px] text-brand-600 font-semibold mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i> GPS: ${alert.latitude.toFixed(4)}, ${alert.longitude.toFixed(4)}</p>` : ''}
+                            </div>
+                        </div>
+                        <button onclick="resolveSosAlert('${alert.id}')" class="bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold px-4 py-2 rounded-xl text-xs transition shadow-sm shrink-0">
+                            <i class="fa-solid fa-check mr-1"></i> Resolve Alert
+                        </button>
+                    </div>
+                `;
+                if (idx < 3) overviewHTML += cardHTML;
+                fullHTML += cardHTML;
+            });
+
+            overviewAlertsEl.innerHTML = overviewHTML;
+            fullSosContainerEl.innerHTML = fullHTML;
+        }
+
+        const studentLoc = JSON.parse(localStorage.getItem('activeStudentLocation') || 'null');
+        const telemetryInfoEl = document.getElementById('adminTelemetryInfo');
+        const gpsMetricEl = document.getElementById('gpsMetric');
+        const mapStatusBadge = document.getElementById('mapStatusBadge');
+
+        if (studentLoc && studentLoc.latitude && studentLoc.longitude) {
+            gpsMetricEl.innerText = "Live";
+            mapStatusBadge.innerText = "Student Connected Live";
+            mapStatusBadge.className = "pill bg-emerald-100 text-emerald-700";
+
+            telemetryInfoEl.innerHTML = `
+                <p class="font-bold text-slate-900">${studentLoc.studentName} (${studentLoc.roll})</p>
+                <p class="text-slate-600">Lat: ${studentLoc.latitude.toFixed(4)} | Lng: ${studentLoc.longitude.toFixed(4)}</p>
+                <p class="text-[10px] text-slate-400">Last Ping: ${new Date(studentLoc.timestamp).toLocaleTimeString()}</p>
+            `;
+
+            const latLng = [studentLoc.latitude, studentLoc.longitude];
+            if (!studentMarker) {
+                studentMarker = L.marker(latLng, { icon: studentIcon }).addTo(adminMap).bindPopup(`<b>${studentLoc.studentName}</b><br/>Broadcasting Live`).openPopup();
+            } else {
+                studentMarker.setLatLng(latLng);
+            }
+            adminMap.setView(latLng, 15);
+        } else {
+            gpsMetricEl.innerText = "Waiting";
+            mapStatusBadge.innerText = "Waiting for student signal";
+            mapStatusBadge.className = "pill bg-amber-100 text-amber-700";
+            telemetryInfoEl.innerHTML = `<p class="text-slate-500 font-medium">No student currently broadcasting location.</p>`;
+        }
+    }
+
+    function resolveSosAlert(id) {
+        let alerts = JSON.parse(localStorage.getItem('smartTravelSOS') || '[]');
+        alerts = alerts.filter(a => a.id !== id);
+        localStorage.setItem('smartTravelSOS', JSON.stringify(alerts));
+        pollAdminData();
+    }
+
+    function clearAllSosAlerts() {
+        if (confirm("Clear all resolved and active alerts?")) {
+            localStorage.removeItem('smartTravelSOS');
+            pollAdminData();
+        }
+    }
+
+    setInterval(pollAdminData, 2000);
+    window.addEventListener('DOMContentLoaded', pollAdminData);
+</script>
+</body>
+</html>

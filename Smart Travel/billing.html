@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing & Fee Statements | Smart Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .smooth-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        @media print {
+            aside, header, footer, .no-print { display: none !important; }
+            body { background: white; }
+            main { padding: 0 !important; }
+            .printable-card { border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex flex-shrink-0 z-20 shadow-sm">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="bg-brand-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-bus-simple text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight text-slate-900">Smart Travel</h1>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5 mt-4">
+                <a href="home.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-house text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Dashboard
+                </a>
+                
+                <a href="booking.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-ticket text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Booking
+                </a>
+                
+                <a href="your-bus.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-bus text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Your Bus
+                </a>
+
+                <a href="billing.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition group border border-brand-100">
+                    <i class="fa-solid fa-receipt text-brand-600 w-5 text-center"></i>
+                    Billing & Pass
+                </a>
+                
+                <a href="emergency.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-triangle-exclamation text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i>
+                    Emergency
+                </a>
+                
+                <a href="tracking.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-map-location-dot text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Bus Tracking
+                </a>
+
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-user text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    My Profile
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-xl font-medium transition group">
+                <i class="fa-solid fa-arrow-right-from-bracket text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 relative">
+        
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-10 flex-shrink-0 h-20 flex items-center px-6 justify-between no-print">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-500 hover:text-brand-600 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h2 class="text-xl font-bold text-slate-800">Fee Statements & Billing</h2>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <button class="relative p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition focus:outline-none">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1.5 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border-2 border-white"></span>
+                        </span>
+                    </button>
+                </div>
+                <a href="profile.html" class="flex items-center gap-3 pl-6 border-l border-slate-200 cursor-pointer">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-slate-900 leading-none" id="headerUserName">Priyanshu Nainwal</p>
+                        <p class="text-[11px] text-slate-500 font-medium mt-1" id="headerUserRoll">ID: ST-89021</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center font-bold shadow-md" id="headerAvatar">
+                        PN
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            
+            <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 no-print">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Institutional Tax Invoice</h2>
+                    <p class="text-slate-500 text-sm mt-1">Manage monthly transport dues, validity periods, and downloadable PDF statements.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="togglePaymentState()" id="actionToggleBtn" class="bg-slate-900 hover:bg-black text-white px-5 py-3 rounded-xl font-bold transition shadow-md flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-circle-check text-green-400"></i> Mark Bill as Cleared
+                    </button>
+                    <button onclick="window.print()" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-3 rounded-xl font-bold transition shadow-md shadow-brand-500/20 flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-file-pdf"></i> Print / PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-3xl p-8 border border-slate-200 smooth-shadow printable-card relative overflow-hidden" id="invoiceCard">
+                        
+                        <div class="flex justify-between items-start border-b border-slate-200 pb-6 mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-brand-600 text-white p-3.5 rounded-2xl shadow-sm">
+                                    <i class="fa-solid fa-bus-simple text-2xl"></i>
+                                </div>
+                                <div>
+                                    <h1 class="font-extrabold text-2xl text-slate-900 leading-none">Smart Travel</h1>
+                                    <p class="text-xs text-slate-500 font-bold tracking-wider uppercase mt-1">College Transport Authority</p>
+                                    <p class="text-[11px] text-slate-400">Dehradun Campus • Official Billing Department</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span id="statusBadge" class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1.5 rounded-full border border-green-200 inline-flex items-center gap-1.5 mb-2">
+                                    <span class="w-2 h-2 rounded-full bg-green-500"></span> CLEARED & PAID
+                                </span>
+                                <p class="text-xs text-slate-400 font-mono">Invoice: <span id="invoiceNum">INV-2026-89021</span></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-brand-50/60 border border-brand-100 rounded-2xl p-4 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center md:text-left">
+                            <div>
+                                <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">Pass Validity Period</p>
+                                <p class="text-sm font-extrabold text-slate-800 mt-0.5" id="validityRange">Oct 10, 2026 → Nov 10, 2026</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">Cycle Frequency</p>
+                                <p class="text-sm font-extrabold text-slate-800 mt-0.5">Month-Wise Pass</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-brand-600 uppercase tracking-wider">Next Monthly Bill Date</p>
+                                <p class="text-sm font-extrabold text-brand-700 mt-0.5" id="nextBillDate">Nov 10, 2026</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-6">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Student Name</p>
+                                <p class="text-sm font-bold text-slate-800 mt-0.5" id="invoiceStudentName">Priyanshu Nainwal</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Roll / ID</p>
+                                <p class="text-sm font-bold text-slate-800 mt-0.5" id="invoiceStudentId">ST-89021</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Issue Date</p>
+                                <p class="text-sm font-bold text-slate-800 mt-0.5" id="issueDate">Oct 10, 2026</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Payment Mode</p>
+                                <p class="text-sm font-bold text-slate-800 mt-0.5" id="payMethod">Digital Gateway (UPI)</p>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto mb-6">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-slate-400 text-xs uppercase font-semibold">
+                                        <th class="py-3 px-2">Line Item</th>
+                                        <th class="py-3 px-2">Allocated Route</th>
+                                        <th class="py-3 px-2 text-right">Fee Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-sm">
+                                    <tr>
+                                        <td class="py-4 px-2">
+                                            <p class="font-bold text-slate-900">Base Registration & Maintenance</p>
+                                            <p class="text-xs text-slate-500">Standard monthly bus pass overhead & administrative charge</p>
+                                        </td>
+                                        <td class="py-4 px-2 text-slate-600 font-medium">Campus Central</td>
+                                        <td class="py-4 px-2 text-right font-bold text-slate-800">₹ 500</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-4 px-2">
+                                            <p class="font-bold text-slate-900">Distance Commute Allocation</p>
+                                            <p class="text-xs text-slate-500">Distance-based fuel & route operational tariff</p>
+                                        </td>
+                                        <td class="py-4 px-2 text-slate-600 font-medium" id="assignedRouteName">Dehradun ISBT</td>
+                                        <td class="py-4 px-2 text-right font-bold text-slate-800" id="assignedRouteFee">₹ 3,200</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="border-t-2 border-slate-200 pt-4 space-y-3 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                            <div class="flex justify-between items-center text-sm text-slate-600">
+                                <span>Subtotal Transport Charge:</span>
+                                <span class="font-bold text-slate-800" id="subTotalAmount">₹ 3,700</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm text-slate-600">
+                                <span>Taxes & GST (0% Student Exempt):</span>
+                                <span class="font-bold text-slate-800">₹ 0</span>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-slate-200 pt-3">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Current Amount Due</p>
+                                    <p class="text-xs text-slate-400">Monthly auto-cleared balance</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-3xl font-extrabold text-green-600" id="dueAmount">₹ 0</p>
+                                    <p class="text-[10px] font-bold text-green-600 uppercase tracking-widest" id="clearedLabel">Cleared Status Active</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400">
+                            <p><i class="fa-solid fa-shield-halved text-brand-600"></i> Authenticated by Smart Travel System • Computer Generated Receipt.</p>
+                            <p class="font-mono bg-slate-100 px-3 py-1 rounded">ST-AUTH-2026-OK</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6 no-print">
+                    
+                    <div class="bg-white rounded-3xl p-6 border border-slate-100 smooth-shadow">
+                        <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-brand-600"></i> Account Status Control
+                        </h3>
+                        
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-4 space-y-2">
+                            <div class="flex justify-between text-xs text-slate-500">
+                                <span>Monthly Status:</span>
+                                <span class="font-bold text-slate-800" id="sideStatusText">CLEARED</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-slate-500">
+                                <span>Remaining Dues:</span>
+                                <span class="font-bold text-green-600" id="sideDueText">₹ 0</span>
+                            </div>
+                        </div>
+
+                        <button onclick="togglePaymentState()" class="w-full py-3 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold rounded-xl text-sm transition flex items-center justify-center gap-2 border border-brand-200">
+                            <i class="fa-solid fa-arrows-rotate"></i> Toggle Pending / Cleared State
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-6 border border-slate-100 smooth-shadow">
+                        <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Monthly Billing History
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">October 2026</p>
+                                    <p class="text-[11px] text-slate-400">Valid: Oct 10 - Nov 10</p>
+                                </div>
+                                <span class="text-[11px] bg-green-100 text-green-700 px-2.5 py-1 rounded-full font-bold">Cleared</span>
+                            </div>
+                            
+                            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between opacity-60">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">September 2026</p>
+                                    <p class="text-[11px] text-slate-400">Valid: Sep 10 - Oct 10</p>
+                                </div>
+                                <span class="text-[11px] bg-slate-200 text-slate-600 px-2.5 py-1 rounded-full font-bold">Paid</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <footer class="mt-12 pt-4 border-t border-slate-200 text-center no-print">
+                <p class="text-xs text-slate-400 font-medium">
+                    &copy; 2026 Smart Travel Management System. By Priyanshu Nainwal & Team.
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        const routeFees = {
+            'isbt': { name: 'Dehradun ISBT Terminal', fee: 3200 },
+            'clocktower': { name: 'Clock Tower', fee: 1800 },
+            'railway': { name: 'Railway Station', fee: 2600 },
+            'premnagar': { name: 'Prem Nagar', fee: 1200 },
+            'raipur': { name: 'Raipur', fee: 3800 }
+        };
+
+        let isCleared = true; 
+        let totalVal = 3700;
+
+        document.addEventListener("DOMContentLoaded", async function() {
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (savedProfile) {
+                document.getElementById('headerUserName').innerText = savedProfile.name;
+                document.getElementById('headerUserRoll').innerText = `ID: ${savedProfile.roll}`;
+                document.getElementById('invoiceStudentName').innerText = savedProfile.name;
+                document.getElementById('invoiceStudentId').innerText = savedProfile.roll;
+                
+                const initials = savedProfile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                document.getElementById('headerAvatar').innerText = initials;
+            }
+
+            const booking = JSON.parse(localStorage.getItem('userBooking'));
+            let routeKey = (booking && booking.routeKey) ? booking.routeKey : 'isbt';
+
+            try {
+                const response = await fetch('http://localhost:8080/api/transport/billing', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    const serverData = await response.json();
+                    if (serverData.routeKey) routeKey = serverData.routeKey;
+                    if (serverData.isCleared !== undefined) isCleared = serverData.isCleared;
+                }
+            } catch (err) {
+                console.log("Java Backend running offline. Synchronized localStorage utilized.");
+            }
+
+            const data = routeFees[routeKey] || routeFees['isbt'];
+            totalVal = 500 + data.fee;
+
+            document.getElementById('assignedRouteName').innerText = data.name;
+            document.getElementById('assignedRouteFee').innerText = '₹ ' + data.fee.toLocaleString('en-IN');
+            document.getElementById('subTotalAmount').innerText = '₹ ' + totalVal.toLocaleString('en-IN');
+
+            const today = new Date();
+            const nextMonth = new Date(today);
+            nextMonth.setDate(today.getDate() + 30);
+
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            const todayFormatted = today.toLocaleDateString('en-US', options);
+            const nextMonthFormatted = nextMonth.toLocaleDateString('en-US', options);
+
+            document.getElementById('issueDate').innerText = todayFormatted;
+            document.getElementById('validityRange').innerText = `${todayFormatted} → ${nextMonthFormatted}`;
+            document.getElementById('nextBillDate').innerText = nextMonthFormatted;
+
+            updateUIState();
+        });
+
+        async function togglePaymentState() {
+            isCleared = !isCleared;
+            updateUIState();
+
+            try {
+                await fetch('http://localhost:8080/api/transport/billing/toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ isCleared: isCleared })
+                });
+            } catch (err) {
+                console.log("Java Backend offline. State updated locally.");
+            }
+        }
+
+        function updateUIState() {
+            const dueAmountEl = document.getElementById('dueAmount');
+            const statusBadgeEl = document.getElementById('statusBadge');
+            const clearedLabelEl = document.getElementById('clearedLabel');
+            const sideStatusText = document.getElementById('sideStatusText');
+            const sideDueText = document.getElementById('sideDueText');
+            const actionToggleBtn = document.getElementById('actionToggleBtn');
+
+            if (isCleared) {
+                dueAmountEl.innerText = '₹ 0';
+                dueAmountEl.className = 'text-3xl font-extrabold text-green-600';
+                
+                clearedLabelEl.innerText = 'CLEARED STATUS ACTIVE';
+                clearedLabelEl.className = 'text-[10px] font-bold text-green-600 uppercase tracking-widest';
+
+                statusBadgeEl.className = 'bg-green-100 text-green-700 text-xs font-bold px-3 py-1.5 rounded-full border border-green-200 inline-flex items-center gap-1.5 mb-2';
+                statusBadgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-500"></span> CLEARED & PAID';
+
+                sideStatusText.innerText = 'CLEARED';
+                sideStatusText.className = 'font-bold text-green-600';
+                sideDueText.innerText = '₹ 0';
+                sideDueText.className = 'font-bold text-green-600';
+
+                actionToggleBtn.innerHTML = '<i class="fa-solid fa-clock text-amber-400"></i> Switch to Pending Mode';
+            } else {
+                dueAmountEl.innerText = '₹ ' + totalVal.toLocaleString('en-IN');
+                dueAmountEl.className = 'text-3xl font-extrabold text-red-600';
+
+                clearedLabelEl.innerText = 'UNPAID DUES OUTSTANDING';
+                clearedLabelEl.className = 'text-[10px] font-bold text-red-600 uppercase tracking-widest';
+
+                statusBadgeEl.className = 'bg-red-100 text-red-700 text-xs font-bold px-3 py-1.5 rounded-full border border-red-200 inline-flex items-center gap-1.5 mb-2';
+                statusBadgeEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span> PAYMENT DUE';
+
+                sideStatusText.innerText = 'PENDING DUES';
+                sideStatusText.className = 'font-bold text-red-600';
+                sideDueText.innerText = '₹ ' + totalVal.toLocaleString('en-IN');
+                sideDueText.className = 'font-bold text-red-600';
+
+                actionToggleBtn.innerHTML = '<i class="fa-solid fa-circle-check text-green-400"></i> Mark Bill as Cleared';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus & Student Tracking | Smart Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe',
+                            500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .smooth-shadow { box-shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        #map { height: 100%; width: 100%; border-radius: 1.5rem; z-index: 10; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex flex-shrink-0 z-20 shadow-sm">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-sm">
+                        <i class="fa-solid fa-bus-simple text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg leading-tight text-slate-900">Smart Travel</h1>
+                        <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Transport Management</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5 mt-2">
+                <a href="home.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition">
+                    <i class="fa-solid fa-house text-slate-400 w-5 text-center"></i> Dashboard
+                </a>
+                <a href="booking.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition">
+                    <i class="fa-solid fa-ticket text-slate-400 w-5 text-center"></i> Booking
+                </a>
+                <a href="your-bus.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition">
+                    <i class="fa-solid fa-bus text-slate-400 w-5 text-center"></i> Your Bus
+                </a>
+                <a href="billing.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition">
+                    <i class="fa-solid fa-receipt text-slate-400 w-5 text-center"></i> Billing & Pass
+                </a>
+                <a href="emergency.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition">
+                    <i class="fa-solid fa-triangle-exclamation text-slate-400 w-5 text-center"></i> Emergency
+                </a>
+                <a href="tracking.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition border border-brand-200">
+                    <i class="fa-solid fa-map-location-dot text-brand-600 w-5 text-center"></i> Bus Tracking
+                </a>
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition">
+                    <i class="fa-solid fa-user text-slate-400 w-5 text-center"></i> My Profile
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-xl font-medium transition">
+                <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 relative">
+        <header class="bg-white border-b border-slate-200 flex-shrink-0 h-20 flex items-center px-6 justify-between">
+            <h2 class="text-xl font-bold text-slate-800">Live Campus Fleet & Student Telemetry</h2>
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-sm font-bold text-slate-900 leading-none" id="navName">Priyanshu Nainwal</p>
+                    <p class="text-[11px] text-slate-500 font-medium mt-1" id="navRoll">ID: ST-89021</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold" id="navAvatar">PN</div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar flex flex-col">
+            <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col lg:flex-row gap-8 fade-in-up">
+                
+                <!-- MAP CONTAINER -->
+                <div class="flex-1 bg-white rounded-3xl p-4 border border-slate-200 smooth-shadow relative h-[450px] lg:h-auto min-h-[400px]">
+                    <div id="map"></div>
+                </div>
+                
+                <!-- CONTROL PANEL SIDEBAR -->
+                <div class="w-full lg:w-96 flex flex-col gap-6 flex-shrink-0">
+                    
+                    <!-- STUDENT GPS BROADCAST CARD -->
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200 smooth-shadow space-y-6">
+                        <div>
+                            <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-satellite-dish text-brand-600"></i> Location Broadcast
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Share your real-time position with the Admin Portal.</p>
+                        </div>
+
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-slate-500">Sharing Status:</span>
+                                <span class="text-amber-600" id="broadcastStatus">Standby</span>
+                            </div>
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-slate-500">Your Latitude:</span>
+                                <span class="font-mono text-slate-800" id="latText">30.3165 N</span>
+                            </div>
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span class="text-slate-500">Your Longitude:</span>
+                                <span class="font-mono text-slate-800" id="lngText">78.0322 E</span>
+                            </div>
+                        </div>
+
+                        <button onclick="toggleStudentGPS()" id="studentGpsBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-3 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-location-arrow"></i> Broadcast My Location to Admin
+                        </button>
+                    </div>
+
+                    <!-- DYNAMIC DRIVER TELEMETRY STATUS PANEL -->
+                    <div class="bg-white rounded-3xl p-6 border border-slate-200 smooth-shadow space-y-3">
+                        <h4 class="font-bold text-sm text-slate-900 flex items-center justify-between">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bus text-brand-600"></i> Active Driver Stream</span>
+                            <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold" id="streamBadgeStatus">Waiting</span>
+                        </h4>
+                        <div id="activeDriverStatusBox" class="p-3 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-500">
+                            No driver currently broadcasting. (When a driver clicks start sharing, their live bus & red trail will appear here automatically).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Dynamic Firebase Realtime Listener Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAlqXUgn1eLkbV4A2oAlg7p6uXIUlKlbWk",
+            authDomain: "smart-travel-bus.firebaseapp.com",
+            databaseURL: "https://smart-travel-bus-default-rtdb.firebaseio.com",
+            projectId: "smart-travel-bus",
+            storageBucket: "smart-travel-bus.firebasestorage.app",
+            messagingSenderId: "786326805651",
+            appId: "1:786326805651:web:f0880add0c5a1f67908166",
+            measurementId: "G-MXJ0Y5HDWT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        const profile = JSON.parse(localStorage.getItem('userProfile')) || {
+            name: "Priyanshu Nainwal",
+            roll: "ST-89021"
+        };
+        document.getElementById('navName').innerText = profile.name;
+        document.getElementById('navRoll').innerText = "ID: " + profile.roll;
+
+        // Initialize Map
+        const map = L.map('map').setView([30.3165, 78.0322], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+        const busIcon = L.divIcon({
+            className: 'bus-marker',
+            html: '<div style="background:#2563eb; color:white; width:38px; height:38px; border-radius:50%; border:3px solid white; box-shadow:0 4px 12px rgba(37,99,235,0.4); display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-bus text-xs"></i></div>',
+            iconSize: [38, 38], iconAnchor: [19, 19]
+        });
+
+        const studentIcon = L.divIcon({
+            className: 'student-marker',
+            html: '<div style="background:#dc2626; color:white; width:38px; height:38px; border-radius:50%; border:3px solid white; box-shadow:0 4px 12px rgba(220,38,38,0.4); display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-user-graduate text-xs"></i></div>',
+            iconSize: [38, 38], iconAnchor: [19, 19]
+        });
+
+        let activeBusMarker = null;
+        let redStrapCoordinates = [];
+        let redStrapPolyline = L.polyline([], { color: '#dc2626', weight: 6, opacity: 0.85 }).addTo(map);
+
+        // Listen to ALL buses in Firebase dynamically
+        const busesRef = ref(db, "buses");
+        onValue(busesRef, (snapshot) => {
+            const allBuses = snapshot.val();
+            let activeFound = false;
+
+            if (allBuses) {
+                Object.keys(allBuses).forEach(key => {
+                    const busData = allBuses[key];
+                    
+                    if (busData && busData.lat && busData.lng) {
+                        activeFound = true;
+                        const latLng = [busData.lat, busData.lng];
+                        
+                        redStrapCoordinates.push(latLng);
+                        redStrapPolyline.setLatLngs(redStrapCoordinates);
+
+                        if (!activeBusMarker) {
+                            activeBusMarker = L.marker(latLng, { icon: busIcon }).addTo(map)
+                                .bindPopup(`<b>${busData.busNumber} (Live)</b><br/>Status: ${busData.statusMsg}`).openPopup();
+                        } else {
+                            activeBusMarker.setLatLng(latLng);
+                            activeBusMarker.bindPopup(`<b>${busData.busNumber} (Live)</b><br/>Status: ${busData.statusMsg}`);
+                        }
+                        map.panTo(latLng);
+
+                        document.getElementById('streamBadgeStatus').innerText = "LIVE";
+                        document.getElementById('streamBadgeStatus').className = "text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold animate-pulse";
+                        document.getElementById('activeDriverStatusBox').innerHTML = `
+                            <p class="font-bold text-slate-800">${busData.busNumber} is Live</p>
+                            <p class="text-[11px] text-slate-500 font-mono mt-1">Lat: ${busData.lat.toFixed(4)}, Lng: ${busData.lng.toFixed(4)}</p>
+                            <p class="text-[10px] text-emerald-600 font-semibold mt-1">🟢 Cellular Stream Connected</p>
+                        `;
+                    }
+                });
+            }
+
+            // If no driver is currently broadcasting, remove marker and red strap immediately
+            if (!activeFound) {
+                if (activeBusMarker) {
+                    map.removeLayer(activeBusMarker);
+                    activeBusMarker = null;
+                }
+                redStrapCoordinates = [];
+                redStrapPolyline.setLatLngs([]);
+                
+                document.getElementById('streamBadgeStatus').innerText = "Waiting";
+                document.getElementById('streamBadgeStatus').className = "text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold";
+                document.getElementById('activeDriverStatusBox').innerHTML = `
+                    No driver currently broadcasting. (When a driver clicks start sharing, their live bus & red trail will appear here automatically).
+                `;
+            }
+        });
+
+        // Student GPS Broadcasting
+        let isBroadcasting = false;
+        let watchId = null;
+        let studentMarker = null;
+
+        window.toggleStudentGPS = function() {
+            const btn = document.getElementById('studentGpsBtn');
+            const status = document.getElementById('broadcastStatus');
+
+            if (!isBroadcasting) {
+                if (!navigator.geolocation) {
+                    alert("Geolocation is not supported by your browser.");
+                    return;
+                }
+
+                isBroadcasting = true;
+                btn.innerHTML = '<i class="fa-solid fa-stop"></i> Stop Location Broadcast';
+                btn.className = 'w-full bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-3 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2';
+                status.innerText = "Broadcasting Live to Admin";
+                status.className = "text-emerald-600 font-bold animate-pulse";
+
+                watchId = navigator.geolocation.watchPosition((pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+
+                    document.getElementById('latText').innerText = lat.toFixed(4) + ' N';
+                    document.getElementById('lngText').innerText = lng.toFixed(4) + ' E';
+
+                    if (!studentMarker) {
+                        studentMarker = L.marker([lat, lng], { icon: studentIcon }).addTo(map)
+                            .bindPopup(`<b>${profile.name} (You)</b><br/>ID: ${profile.roll}`).openPopup();
+                    } else {
+                        studentMarker.setLatLng([lat, lng]);
+                    }
+   
+                    const studentLocationPayload = {
+                        studentName: profile.name,
+                        roll: profile.roll,
+                        latitude: lat,
+                        longitude: lng,
+                        timestamp: new Date().toISOString()
+                    };
+                    localStorage.setItem('activeStudentLocation', JSON.stringify(studentLocationPayload));
+                }, (err) => {
+                    alert("GPS Access Error: " + err.message);
+                }, { enableHighAccuracy: true });
+
+            } else {
+                isBroadcasting = false;
+                if (watchId) navigator.geolocation.clearWatch(watchId);
+                localStorage.removeItem('activeStudentLocation');
+                if (studentMarker) map.removeLayer(studentMarker);
+
+                btn.innerHTML = '<i class="fa-solid fa-location-arrow"></i> Broadcast My Location to Admin';
+                btn.className = 'w-full bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-3 rounded-xl text-xs transition shadow-md flex items-center justify-center gap-2';
+                status.innerText = "Standby";
+                status.className = "text-amber-600";
+            }
+        }
+    </script>
+</body>
+</html>

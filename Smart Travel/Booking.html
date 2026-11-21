@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Booking | Smart Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .smooth-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .fade-in { animation: fadeIn 0.3s ease-in-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex flex-shrink-0 z-20 shadow-sm">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="bg-brand-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-bus-simple text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight text-slate-900">Smart Travel</h1>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5 mt-4">
+                <a href="home.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-house text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Dashboard
+                </a>
+                
+                <a href="booking.html" class="flex items-center gap-3 px-4 py-3 bg-brand-50 text-brand-700 rounded-xl font-bold transition group border border-brand-100">
+                    <i class="fa-solid fa-ticket text-brand-600 w-5 text-center"></i>
+                    Booking
+                </a>
+                
+                <a href="your-bus.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-bus text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Your Bus
+                </a>
+
+                <a href="billing.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-receipt text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Billing & Pass
+                </a>
+                
+                <a href="emergency.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-triangle-exclamation text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i>
+                    Emergency
+                </a>
+                
+                <a href="tracking.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-map-location-dot text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    Bus Tracking
+                </a>
+
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-user text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i>
+                    My Profile
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-xl font-medium transition group">
+                <i class="fa-solid fa-arrow-right-from-bracket text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 relative">
+        
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-10 flex-shrink-0 h-20 flex items-center px-6 justify-between">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-500 hover:text-brand-600 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h2 class="text-xl font-bold text-slate-800">Transport Booking</h2>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <button class="relative p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition focus:outline-none">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1.5 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border-2 border-white"></span>
+                        </span>
+                    </button>
+                </div>
+                <a href="profile.html" class="flex items-center gap-3 pl-6 border-l border-slate-200 cursor-pointer">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-slate-900 leading-none">Priyanshu Nainwal</p>
+                        <p class="text-[11px] text-slate-500 font-medium mt-1">ID: ST-89021</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center font-bold shadow-md">
+                        PN
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            
+            <div class="mb-8">
+                <h2 class="text-2xl font-extrabold text-slate-900">New Pass Application</h2>
+                <p class="text-slate-500 text-sm mt-1">Fill out the details below to generate your transport fee structure based on your academic level and route.</p>
+            </div>
+
+            <div class="flex flex-col xl:flex-row gap-8">
+                
+                <div class="xl:w-2/3 space-y-6">
+                    <form id="bookingForm" class="bg-white rounded-3xl smooth-shadow border border-slate-100 p-6 lg:p-8">
+                        
+                        <div class="mb-8">
+                            <h3 class="text-sm font-bold text-brand-600 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">
+                                <i class="fa-regular fa-id-card mr-2"></i>Student Details
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Student Age</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-cake-candles"></i></div>
+                                        <input type="number" min="3" max="50" value="20" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white" placeholder="Enter age">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Institution Type</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-building-columns"></i></div>
+                                        <select id="institutionType" onchange="toggleAcademicFields()" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white appearance-none cursor-pointer">
+                                            <option value="">Select Institution</option>
+                                            <option value="school">School</option>
+                                            <option value="college" selected>College / University</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="schoolFields" class="hidden fade-in grid grid-cols-1 md:grid-cols-2 gap-5 pt-2 border-t border-slate-50">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Current Class</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-chalkboard-user"></i></div>
+                                        <select class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white appearance-none cursor-pointer">
+                                            <option value="">Select Class</option>
+                                            <option value="10">Class 10</option>
+                                            <option value="12">Class 12</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="collegeFields" class="fade-in grid grid-cols-1 md:grid-cols-2 gap-5 pt-2 border-t border-slate-50">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Course / Program</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-graduation-cap"></i></div>
+                                        <input type="text" value="BCA (Bachelor of Computer Applications)" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white font-medium" readonly>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Current Year</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-regular fa-calendar"></i></div>
+                                        <input type="text" value="2nd Year" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white font-medium" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h3 class="text-sm font-bold text-brand-600 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">
+                                <i class="fa-regular fa-address-book mr-2"></i>Contact Details
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Mobile Number</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-phone"></i></div>
+                                        <input type="tel" value="+91 98765 43210" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Emergency Contact (Parent/Guardian)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-house-medical"></i></div>
+                                        <input type="tel" value="+91 91234 56789" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-bold text-brand-600 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">
+                                <i class="fa-solid fa-route mr-2"></i>Route Selection
+                            </h3>
+                            
+                            <div class="bg-brand-50 border border-brand-100 rounded-xl p-4 mb-5 flex gap-3 text-brand-700 text-sm">
+                                <i class="fa-solid fa-circle-info mt-0.5"></i>
+                                <p>Your transport fee is calculated dynamically based on the distance of your selected pickup point to the main campus.</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-5">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Select Pickup Point</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-brand-600"><i class="fa-solid fa-location-dot"></i></div>
+                                        <select id="routeSelect" onchange="calculateFee()" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-brand-500/20 focus:border-brand-500 outline-none text-sm bg-slate-50 focus:bg-white appearance-none cursor-pointer font-medium">
+                                            <option value="">-- Choose your nearest stop --</option>
+                                            <option value="isbt">Dehradun ISBT Terminal</option>
+                                            <option value="clocktower">Clock Tower</option>
+                                            <option value="railway">Railway Station</option>
+                                            <option value="premnagar">Prem Nagar</option>
+                                            <option value="raipur">Raipur</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="xl:w-1/3">
+                    <div class="bg-slate-900 rounded-3xl p-6 lg:p-8 text-white shadow-xl sticky top-6 relative overflow-hidden">
+                        
+                        <div class="absolute top-0 right-0 -mt-8 -mr-8 w-32 h-32 bg-brand-600 rounded-full blur-2xl opacity-40"></div>
+                        
+                        <h3 class="text-lg font-bold mb-6 flex items-center gap-2 border-b border-slate-700 pb-4 relative z-10">
+                            <i class="fa-solid fa-receipt text-brand-400"></i> Fare Summary
+                        </h3>
+
+                        <div class="space-y-4 relative z-10">
+                            
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-400">Term Duration</span>
+                                <span class="font-semibold text-white">Full Semester</span>
+                            </div>
+                            
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-400">Calculated Distance</span>
+                                <span id="displayDistance" class="font-bold text-brand-400">-- km</span>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-700/50 space-y-3 mt-2">
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-400">Base Registration Fee</span>
+                                    <span class="font-medium">₹ 500</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-400">Route / Distance Charge</span>
+                                    <span id="displayRouteFee" class="font-medium">₹ 0</span>
+                                </div>
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-400">Taxes & GST (0%)</span>
+                                    <span class="font-medium">₹ 0</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-dashed border-slate-600 mt-2">
+                                <div class="flex justify-between items-end">
+                                    <span class="text-slate-300 font-medium">Total Payable</span>
+                                    <div class="text-right">
+                                        <span id="displayTotalFee" class="text-3xl font-extrabold text-white">₹ 0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button id="submitBtn" onclick="confirmBooking()" disabled class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-brand-600/30 mt-6 flex justify-center items-center gap-2 opacity-50 cursor-not-allowed">
+                                Proceed to Payment <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            
+                            <p class="text-[10px] text-slate-400 text-center mt-3">
+                                <i class="fa-solid fa-lock text-slate-500 mr-1"></i> Secured via SSL Encryption. This action will update your dashboard.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <footer class="mt-10 pt-4 border-t border-slate-200 text-center">
+                <p class="text-xs text-slate-400 font-medium">
+                    &copy; 2026 Smart Travel Management System. By Priyanshu Nainwal & Team.
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        function toggleAcademicFields() {
+            const type = document.getElementById('institutionType').value;
+            const schoolFields = document.getElementById('schoolFields');
+            const collegeFields = document.getElementById('collegeFields');
+
+            schoolFields.classList.add('hidden');
+            collegeFields.classList.add('hidden');
+
+            if (type === 'school') {
+                schoolFields.classList.remove('hidden');
+            } else if (type === 'college') {
+                collegeFields.classList.remove('hidden');
+            }
+        }
+
+        const routeData = {
+            'isbt': { distance: 15.2, fee: 3200, bus: 'Bus #21' },
+            'clocktower': { distance: 8.5, fee: 1800, bus: 'Bus #04' },
+            'railway': { distance: 12.0, fee: 2600, bus: 'Bus #11' },
+            'premnagar': { distance: 5.4, fee: 1200, bus: 'Bus #02' },
+            'raipur': { distance: 18.1, fee: 3800, bus: 'Bus #15' }
+        };
+
+        const BASE_FEE = 500;
+
+        function calculateFee() {
+            const selectElement = document.getElementById('routeSelect');
+            const selectedRoute = selectElement.value;
+            
+            const distEl = document.getElementById('displayDistance');
+            const routeFeeEl = document.getElementById('displayRouteFee');
+            const totalFeeEl = document.getElementById('displayTotalFee');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (selectedRoute && routeData[selectedRoute]) {
+                const data = routeData[selectedRoute];
+                
+                distEl.innerText = data.distance.toFixed(1) + ' km';
+                routeFeeEl.innerText = '₹ ' + data.fee.toLocaleString('en-IN');
+                
+                const total = BASE_FEE + data.fee;
+                totalFeeEl.innerText = '₹ ' + total.toLocaleString('en-IN');
+
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-brand-600');
+                submitBtn.classList.add('bg-green-600', 'hover:bg-green-500', 'shadow-green-600/30');
+                submitBtn.innerHTML = 'Confirm Booking & Pay <i class="fa-solid fa-check"></i>';
+            } else {
+                distEl.innerText = '-- km';
+                routeFeeEl.innerText = '₹ 0';
+                totalFeeEl.innerText = '₹ 0';
+                
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-brand-600');
+                submitBtn.classList.remove('bg-green-600', 'hover:bg-green-500', 'shadow-green-600/30');
+                submitBtn.innerHTML = 'Proceed to Payment <i class="fa-solid fa-arrow-right"></i>';
+            }
+        }
+
+        async function confirmBooking() {
+            const btn = document.getElementById('submitBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing Payment...';
+            
+            const routeKey = document.getElementById('routeSelect').value;
+            const routeDetails = routeData[routeKey] || routeData['isbt'];
+
+            const bookingData = {
+                studentId: "ST-89021",
+                studentName: "Priyanshu Nainwal",
+                routeKey: routeKey,
+                assignedBus: routeDetails.bus,
+                totalFare: BASE_FEE + routeDetails.fee,
+                status: "Confirmed"
+            };
+
+            localStorage.setItem('userBooking', JSON.stringify(bookingData));
+
+            try {
+                await fetch('http://localhost:8080/api/transport/book', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookingData)
+                });
+            } catch (err) {
+                console.log("Java Backend running offline. Local state synchronized.");
+            }
+            
+            setTimeout(() => {
+                alert("Payment Successful! Pass generated. Redirecting to your assigned bus details.");
+                window.location.href = 'your-bus.html'; 
+            }, 1200);
+        }
+    </script>
+</body>
+</html>

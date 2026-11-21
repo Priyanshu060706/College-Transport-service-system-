@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency & Support | Smart Travel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f8fafc; }
+        .smooth-shadow { box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        .marquee-container { overflow: hidden; white-space: nowrap; position: relative; }
+        .marquee-content { display: inline-block; animation: marquee 25s linear infinite; }
+        .marquee-content:hover { animation-play-state: paused; }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Classical Modal & Backdrop Animations */
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            transition: opacity 0.3s ease;
+        }
+        @keyframes modalPop {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-animation {
+            animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-brand-100 selection:text-brand-900 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between hidden md:flex flex-shrink-0 z-20 shadow-sm">
+        <div>
+            <div class="h-20 flex items-center px-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="bg-brand-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-bus-simple text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight text-slate-900">Smart Travel</h1>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="p-4 space-y-1.5 mt-4">
+                <a href="home.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-house text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i> Dashboard
+                </a>
+                <a href="booking.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-ticket text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i> Booking
+                </a>
+                <a href="your-bus.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-bus text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i> Your Bus
+                </a>
+                <a href="billing.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-receipt text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i> Billing & Pass
+                </a>
+                <a href="emergency.html" class="flex items-center gap-3 px-4 py-3 bg-red-50 text-red-700 rounded-xl font-bold transition group border border-red-100">
+                    <i class="fa-solid fa-triangle-exclamation text-red-600 w-5 text-center"></i> Emergency
+                </a>
+                <a href="tracking.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-map-location-dot text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i> Bus Tracking
+                </a>
+                <a href="profile.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition group">
+                    <i class="fa-solid fa-user text-slate-400 group-hover:text-brand-500 w-5 text-center transition"></i> My Profile
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-100">
+            <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-xl font-medium transition group">
+                <i class="fa-solid fa-arrow-right-from-bracket text-slate-400 group-hover:text-red-500 w-5 text-center transition"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 relative">
+        
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-10 flex-shrink-0 h-20 flex items-center px-6 justify-between">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-slate-500 hover:text-brand-600 transition">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <h2 class="text-xl font-bold text-slate-800">Emergency & Helpline Center</h2>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative">
+                    <button class="relative p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition focus:outline-none">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute top-1 right-1.5 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border-2 border-white"></span>
+                        </span>
+                    </button>
+                </div>
+                <a href="profile.html" class="flex items-center gap-3 pl-6 border-l border-slate-200 cursor-pointer">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-slate-900 leading-none" id="headerUserName">Priyanshu Nainwal</p>
+                        <p class="text-[11px] text-slate-500 font-medium mt-1" id="headerUserRoll">ID: ST-89021</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center font-bold shadow-md" id="headerAvatar">
+                        PN
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar flex flex-col justify-between">
+            
+            <div class="fade-in-up">
+                
+                <!-- Live Alerts Marquee -->
+                <div class="mb-6 bg-red-600 text-white rounded-2xl shadow-lg overflow-hidden flex items-center border border-red-700">
+                    <div class="bg-red-800 px-6 py-3 flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest shrink-0 z-10 shadow-md">
+                        <i class="fa-solid fa-triangle-exclamation text-yellow-300 animate-pulse"></i> Live Alerts
+                    </div>
+                    <div class="marquee-container w-full py-2.5">
+                        <div class="marquee-content flex gap-12 px-4 text-sm font-medium">
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-cloud-showers-heavy text-yellow-300"></i>
+                                <strong>Weather Alert:</strong> Slight delays across ISBT & Clock Tower routes due to heavy rain in Dehradun.
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <i class="fa-solid fa-road-barrier text-yellow-300"></i>
+                                <strong>Route Blockage:</strong> Main Market road closed for repairs. Bus #04 diverted via Bypass.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shorter Emergency Trigger Banner -->
+                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-2xl px-6 py-5 text-white shadow-lg mb-8 flex flex-col sm:flex-row justify-between items-center gap-4 relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-red-500 rounded-full blur-2xl opacity-30"></div>
+                    <div class="relative z-10 space-y-1 text-center sm:text-left">
+                        <span class="bg-red-900/60 text-red-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-red-400/30">
+                            24/7 Rapid Response Protocol
+                        </span>
+                        <h2 class="text-xl font-extrabold">Emergency Assistance in Transit</h2>
+                        <p class="text-red-100 text-xs max-w-lg">
+                            Facing a breakdown, safety issue, or medical emergency? Click trigger to send your live location and message directly to the admin console.
+                        </p>
+                    </div>
+                    <button onclick="openSosModal()" class="bg-white hover:bg-red-50 text-red-600 font-extrabold px-6 py-3 rounded-xl shadow-md transition transform hover:scale-105 active:scale-95 flex items-center gap-2.5 shrink-0 relative z-10 text-sm">
+                        <i class="fa-solid fa-tower-broadcast text-red-600 animate-ping"></i> Trigger SOS Emergency
+                    </button>
+                </div>
+
+                <!-- Helpline Directory -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-phone-volume text-red-600"></i> Official Helpline Directory
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow hover:border-red-300 transition">
+                            <div class="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Transit Control Room</p>
+                            <h4 class="text-lg font-bold text-slate-900 mt-1">Campus Dispatch</h4>
+                            <a href="tel:+918000198234" class="text-brand-600 font-extrabold text-lg mt-2 inline-block hover:underline">+91 800-019-8234</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow hover:border-red-300 transition">
+                            <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Safety & Vigilance</p>
+                            <h4 class="text-lg font-bold text-slate-900 mt-1">Campus Security Cell</h4>
+                            <a href="tel:+919876543210" class="text-brand-600 font-extrabold text-lg mt-2 inline-block hover:underline">+91 98765-43210</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow hover:border-red-300 transition">
+                            <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-truck-medical"></i>
+                            </div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Medical Emergency</p>
+                            <h4 class="text-lg font-bold text-slate-900 mt-1">Campus Infirmary</h4>
+                            <a href="tel:+91108" class="text-brand-600 font-extrabold text-lg mt-2 inline-block hover:underline">108 / +91 98123-00108</a>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 smooth-shadow hover:border-red-300 transition">
+                            <div class="w-12 h-12 bg-blue-50 text-brand-600 rounded-xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </div>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Fleet In-Charge</p>
+                            <h4 class="text-lg font-bold text-slate-900 mt-1">Transport Officer</h4>
+                            <a href="tel:+919812345678" class="text-brand-600 font-extrabold text-lg mt-2 inline-block hover:underline">+91 98123-45678</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <footer class="mt-8 pt-4 border-t border-slate-200 text-center">
+                <p class="text-xs text-slate-400 font-medium">
+                    &copy; 2026 Smart Travel Management System. By Priyanshu Nainwal & Team.
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- ================= CLASSICAL CENTERED SOS MODAL ================= -->
+    <div id="sosModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 modal-animation border border-slate-100 relative">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-slate-900 leading-tight">Emergency SOS Broadcast</h3>
+                        <p class="text-xs text-slate-500">Notifies transport admin & security instantly</p>
+                    </div>
+                </div>
+                <button onclick="closeSosModal()" class="text-slate-400 hover:text-slate-600 p-2 rounded-lg transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="modalSosInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Describe Your Emergency / Issue:</label>
+                    <textarea id="modalSosInput" rows="3" placeholder="e.g. Bus #21 stalled near Clock Tower, medical assistance needed..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:bg-white transition"></textarea>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2.5 text-xs text-amber-800">
+                    <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
+                    <span>Your GPS coordinates and student profile ID will be attached securely to this emergency alert.</span>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button onclick="closeSosModal()" class="px-5 py-2.5 rounded-xl font-bold text-xs text-slate-600 hover:bg-slate-100 transition">
+                        Cancel
+                    </button>
+                    <button onclick="confirmAndSendSOS()" class="bg-red-600 hover:bg-red-700 text-white font-extrabold px-6 py-2.5 rounded-xl text-xs transition shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Confirm & Send SOS
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- =============================================================== -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (savedProfile) {
+                document.getElementById('headerUserName').innerText = savedProfile.name;
+                document.getElementById('headerUserRoll').innerText = `ID: ${savedProfile.roll}`;
+                const initials = savedProfile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                document.getElementById('headerAvatar').innerText = initials;
+            }
+        });
+
+        function openSosModal() {
+            document.getElementById('sosModal').classList.remove('hidden');
+            document.getElementById('modalSosInput').focus();
+        }
+
+        function closeSosModal() {
+            document.getElementById('sosModal').classList.add('hidden');
+            document.getElementById('modalSosInput').value = '';
+        }
+
+        async function confirmAndSendSOS() {
+            const customMessage = document.getElementById('modalSosInput').value.trim() || "Emergency assistance required in transit.";
+            closeSosModal();
+
+            const profile = JSON.parse(localStorage.getItem('userProfile') || 'null') || { name: 'Priyanshu Nainwal', roll: 'ST-89021' };
+            const booking = JSON.parse(localStorage.getItem('userBooking') || 'null') || { busNumber: 'Bus #21', routeKey: 'ISBT Route' };
+
+            async function dispatchAlert(latitude = null, longitude = null, accuracy = null) {
+                const alertPayload = {
+                    id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()),
+                    studentName: profile.name,
+                    roll: profile.roll || 'ST-89021',
+                    bus: booking.busNumber || booking.bus || 'Bus #21',
+                    route: booking.routeName || booking.routeKey || 'Dehradun ISBT',
+                    message: customMessage,
+                    latitude: latitude,
+                    longitude: longitude,
+                    accuracy: accuracy,
+                    timestamp: new Date().toISOString(),
+                    status: 'ACTIVE'
+                };
+
+                // 1. Try Java Spring Boot Backend POST
+                try {
+                    const response = await fetch('http://localhost:8080/api/transport/sos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(alertPayload)
+                    });
+                    if (response.ok) {
+                        console.log("SOS successfully sent to Java Backend server.");
+                    }
+                } catch (e) {
+                    console.log("Java Backend offline. Falling back to shared localStorage sync.");
+                }
+
+                // 2. Update local storage queue so admin page picks it up instantly with sound/highlight
+                const existingAlerts = JSON.parse(localStorage.getItem('smartTravelSOS') || '[]');
+                existingAlerts.unshift(alertPayload);
+                localStorage.setItem('smartTravelSOS', JSON.stringify(existingAlerts));
+                localStorage.setItem('latestEmergencyAlert', JSON.stringify(alertPayload));
+
+                alert("🚨 SOS Emergency Broadcast Sent Successfully! Admin console has been alerted.");
+            }
+
+            if (!navigator.geolocation) {
+                dispatchAlert();
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                pos => dispatchAlert(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
+                () => dispatchAlert(),
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        }
+    </script>
+</body>
+</html>
